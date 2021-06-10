@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/static/css/main.1f1f95a0.chunk.css",
+    "main.js": "/static/js/main.785baa18.chunk.js",
+    "main.js.map": "/static/js/main.785baa18.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.ef7e845c.js",
+    "runtime-main.js.map": "/static/js/runtime-main.ef7e845c.js.map",
+    "static/js/2.da4b880f.chunk.js": "/static/js/2.da4b880f.chunk.js",
+    "static/js/2.da4b880f.chunk.js.map": "/static/js/2.da4b880f.chunk.js.map",
+    "static/js/3.6db2bbc2.chunk.js": "/static/js/3.6db2bbc2.chunk.js",
+    "static/js/3.6db2bbc2.chunk.js.map": "/static/js/3.6db2bbc2.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.1f1f95a0.chunk.css.map": "/static/css/main.1f1f95a0.chunk.css.map",
+    "static/js/2.da4b880f.chunk.js.LICENSE.txt": "/static/js/2.da4b880f.chunk.js.LICENSE.txt",
+    "static/media/App.css": "/static/media/1.8f855d69.jpg",
+    "static/media/Close.f2062752.svg": "/static/media/Close.f2062752.svg",
+    "static/media/Hamburger.c166e4f0.svg": "/static/media/Hamburger.c166e4f0.svg",
+    "static/media/MyMoji.63c627c8.png": "/static/media/MyMoji.63c627c8.png",
+    "static/media/hello.d26a006b.png": "/static/media/hello.d26a006b.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ef7e845c.js",
+    "static/js/2.da4b880f.chunk.js",
+    "static/css/main.1f1f95a0.chunk.css",
+    "static/js/main.785baa18.chunk.js"
+  ]
+}
