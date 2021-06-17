@@ -1,29 +1,31 @@
 {
   "files": {
     "main.css": "/static/css/main.0231f782.chunk.css",
-    "main.js": "/static/js/main.40b2a18c.chunk.js",
-    "main.js.map": "/static/js/main.40b2a18c.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.3dea93dd.js",
-    "runtime-main.js.map": "/static/js/runtime-main.3dea93dd.js.map",
-    "static/js/2.266127f8.chunk.js": "/static/js/2.266127f8.chunk.js",
-    "static/js/2.266127f8.chunk.js.map": "/static/js/2.266127f8.chunk.js.map",
-    "static/js/3.1fa8b6b6.chunk.js": "/static/js/3.1fa8b6b6.chunk.js",
-    "static/js/3.1fa8b6b6.chunk.js.map": "/static/js/3.1fa8b6b6.chunk.js.map",
+    "main.js": "/static/js/main.14f02f93.chunk.js",
+    "main.js.map": "/static/js/main.14f02f93.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.8d5d4c00.js",
+    "runtime-main.js.map": "/static/js/runtime-main.8d5d4c00.js.map",
+    "static/js/2.9db9b6cd.chunk.js": "/static/js/2.9db9b6cd.chunk.js",
+    "static/js/2.9db9b6cd.chunk.js.map": "/static/js/2.9db9b6cd.chunk.js.map",
+    "static/js/3.1a42298a.chunk.js": "/static/js/3.1a42298a.chunk.js",
+    "static/js/3.1a42298a.chunk.js.map": "/static/js/3.1a42298a.chunk.js.map",
+    "static/js/4.d34ac3e9.chunk.js": "/static/js/4.d34ac3e9.chunk.js",
+    "static/js/4.d34ac3e9.chunk.js.map": "/static/js/4.d34ac3e9.chunk.js.map",
     "index.html": "/index.html",
     "static/css/main.0231f782.chunk.css.map": "/static/css/main.0231f782.chunk.css.map",
-    "static/js/2.266127f8.chunk.js.LICENSE.txt": "/static/js/2.266127f8.chunk.js.LICENSE.txt",
+    "static/js/2.9db9b6cd.chunk.js.LICENSE.txt": "/static/js/2.9db9b6cd.chunk.js.LICENSE.txt",
     "static/media/App.css": "/static/media/3.d6ca3939.jpg",
     "static/media/Close.f2062752.svg": "/static/media/Close.f2062752.svg",
     "static/media/Hamburger.c166e4f0.svg": "/static/media/Hamburger.c166e4f0.svg",
     "static/media/MyMoji.63c627c8.png": "/static/media/MyMoji.63c627c8.png",
-    "static/media/MyMoji1.01c60b79.png": "/static/media/MyMoji1.01c60b79.png",
+    "static/media/MyMoji1.png": "/static/media/MyMoji1.01c60b79.png",
     "static/media/hello.d26a006b.png": "/static/media/hello.d26a006b.png",
     "static/media/hello1.5d29d074.png": "/static/media/hello1.5d29d074.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.3dea93dd.js",
-    "static/js/2.266127f8.chunk.js",
+    "static/js/runtime-main.8d5d4c00.js",
+    "static/js/2.9db9b6cd.chunk.js",
     "static/css/main.0231f782.chunk.css",
-    "static/js/main.40b2a18c.chunk.js"
+    "static/js/main.14f02f93.chunk.js"
   ]
 }
