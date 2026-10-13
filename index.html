@@ -96,6 +96,7 @@
     .rline{opacity:1;animation:none}
   }
 </style>
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
 </head>
 <body>
 <main>
@@ -116,8 +117,8 @@
   <section class="reveal" style="animation-delay:.15s">
     <div class="label">previously built</div>
     <ul class="wins">
-      <li><b>Unlimited SAT</b> - an SAT-prep platform with paying users</li>
-      <li><b>OpenFix</b> — <span class="q">Agentic Github issue resolver</span></li>
+      <li><b>Unlimited SAT</b> — an SAT-prep platform with paying users</li>
+      <li><b>OpenFix</b> — agentic GitHub issue resolver</li>
       <li><b>Lofi-Study</b> — a productivity site built around low-fidelity sound</li>
       <li><b>Bhojan</b> — an AI calorie tracker</li>
     </ul>
@@ -126,7 +127,7 @@
 
   <section class="reveal" style="animation-delay:.27s">
     <div class="label"><marquee>how this page reached you</marquee></div>
-    <pre class="receipt" id="receipt" aria-live="polite">measuring…<span class="cursor" aria-hidden="true"> </span></pre>
+    <pre class="receipt" id="receipt" aria-live="polite">this box fills in with your browser's own timing of this page — needs JavaScript.<span class="cursor" aria-hidden="true"> </span></pre>
     <details class="about">
       <summary>what am I looking at?</summary>
       <p>This page arrives in a single network round trip — about 6&nbsp;KB, no web
@@ -206,6 +207,8 @@
       tls:  nav.secureConnectionStart > 0 ? nav.connectEnd - nav.secureConnectionStart : 0,
       ttfb: nav.responseStart - nav.requestStart,
       transfer: nav.transferSize, encoded: nav.encodedBodySize, decoded: nav.decodedBodySize,
+      proto: nav.nextHopProtocol || "",
+      warm: nav.connectStart === nav.connectEnd,   // connection reused — no new handshake
       cached: nav.transferSize === 0 && nav.decodedBodySize > 0
     };
   }
@@ -218,8 +221,13 @@
     } else if(t.cached || (t.encoded === 0 && t.dns === 0 && t.ttfb === 0)){
       lines.push("served from cache — <span class='ok'>0 RTT</span> (nothing crossed the network)");
     } else {
-      var wire = t.encoded || t.transfer || 0, fits = wire > 0 && wire <= 14600;
-      lines.push("DNS <b>"+ms(t.dns)+"</b> · TCP <b>"+ms(t.tcp)+"</b> · TLS <b>"+ms(t.tls)+"</b> · TTFB <b>"+ms(t.ttfb)+"</b>");
+      var wire = t.transfer || t.encoded || 0, fits = wire > 0 && wire <= 14600;
+      var proto = t.proto ? " · <b>"+esc(t.proto)+"</b>" : "";
+      if(t.warm){
+        lines.push("warm connection — reused, no new handshake"+proto+" · TTFB <b>"+ms(t.ttfb)+"</b>");
+      } else {
+        lines.push("DNS <b>"+ms(t.dns)+"</b> · TCP <b>"+ms(t.tcp)+"</b> · TLS <b>"+ms(t.tls)+"</b>"+proto+" · TTFB <b>"+ms(t.ttfb)+"</b>");
+      }
       lines.push("<b>"+(wire?wire.toLocaleString():"?")+" B</b> on the wire"+(t.decoded?" ("+t.decoded.toLocaleString()+" B decoded)":"")+" — "+(fits
         ? "<span class='ok' title='The whole document fit inside the TCP initial congestion window (~14,600 B = 10 segments × 1460 B), so it arrived in a single round trip.'>fits one round trip ✓</span> (≤ 14,600 B initcwnd)"
         : "<span class='warn'>"+(wire?"over initcwnd":"size hidden by browser")+"</span>"));
@@ -227,7 +235,7 @@
     lines.push("");
     lines.push("<span class='k' title='eXpress Data Path: an eBPF hook that steers packets in the kernel, before the normal network stack. XDP_PASS = let this one through.'>XDP_PASS</span> → "+
       "<span title='Maglev consistent hashing (Google): a lookup table that pins each visitor to a stable backend and barely reshuffles when one is added or removed.'>maglev["+a.slot+"]</span> → "+
-      "<b>"+esc(a.backend)+"</b> of "+live.length+"  (view: <span class='k'>"+VIEWS[a.idxOfAll]+"</span>)");
+      "<b>"+esc(a.backend)+"</b> of "+live.length);
     lines.push("<span style='color:var(--faint)'>visitor "+esc(id.slice(0,12))+" · every visitor is hashed to a stable backend</span>");
     return lines;
   }
@@ -245,26 +253,29 @@
   /* ---------- controls ---------- */
   function killBackend(){
     if(live.length <= 2){ live = ALL.slice(); renderReceipt(false); return; }
+    var id = visitorId(false);
+    var mineBefore = assign(id, live).backend;
     var before = buildTable(live), victim = live[live.length-1], after = live.slice(0,-1), afterT = buildTable(after);
-    var moved = 0, dead = 0;
-    for(var i=0;i<M;i++){
-      var wasName = live[before[i]], nowName = after[afterT[i]];
-      if(wasName === victim) dead++;
-      if(wasName !== nowName) moved++;
-    }
+    var moved = 0;
+    for(var i=0;i<M;i++){ if(live[before[i]] !== after[afterT[i]]) moved++; }
     live = after;
+    var mineAfter = assign(id, live).backend;
     renderReceipt(false);
-    receipt.innerHTML += "\n<span class='warn'>killed "+victim+"</span> — "+(100*moved/M).toFixed(1)+"% of slots remapped ("+(100*dead/M).toFixed(1)+"% had to; rest stayed put)";
+    var personal = (mineBefore === mineAfter)
+      ? "you were on <b>"+esc(mineBefore)+"</b> — you stayed put <span class='ok'>✓</span>"
+      : "you were on <b>"+esc(mineBefore)+"</b> → rerouted to <b>"+esc(mineAfter)+"</b>";
+    receipt.innerHTML += "\n<span class='warn'>killed "+victim+"</span> — "+personal+"  ("+(100*moved/M).toFixed(1)+"% of visitors moved)";
   }
 
   document.getElementById("kill").addEventListener("click", killBackend);
   document.getElementById("reroll").addEventListener("click", function(){ visitorId(true); live = ALL.slice(); renderReceipt(false); });
   document.getElementById("theme").addEventListener("click", function(){
-    var cur = document.documentElement.getAttribute("data-theme");
+    var cur = document.documentElement.getAttribute("data-theme") ||
+              (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
     var next = cur === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next); store("theme", next);
   });
-  (function(){ var saved = store("theme"); if(saved) document.documentElement.setAttribute("data-theme", saved); })();
+  // theme restore now runs in a <head> script, before first paint
 
   /* ---------- name scramble on hover (cheap, no deps) ---------- */
   (function(){
@@ -311,7 +322,4 @@
     [38;5;245mlinkedin   [0m[38;5;43m]8;;https://www.linkedin.com/in/dev10shah/\linkedin.com/in/dev10shah]8;;\[0m
 
   [38;5;240myou ran `curl` on a portfolio — the same bytes are a web page.[0m
-  [38;5;240mopen [0m[38;5;43mhttps://shahdev.me[0m[38;5;240m to watch it report its own delivery.[0m
-[0m
-[8m
--->
+  [38;5;240mopen [38;5;43mhttps://shahdev.me[38;5;240m in a browser[0m  [0m-->

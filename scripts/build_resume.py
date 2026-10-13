@@ -57,15 +57,16 @@ a(lrow("x", "x.com/devshahthinks", "https://x.com/devshahthinks"))
 a(lrow("linkedin", "linkedin.com/in/dev10shah", "https://www.linkedin.com/in/dev10shah/"))
 a("")
 a("  " + FNT + "you ran `curl` on a portfolio — the same bytes are a web page." + R)
-a("  " + FNT + "open " + R + ACC + "https://shahdev.me" + R + FNT + " to watch it report its own delivery." + R)
-a("")
+a("  " + FNT + "open " + ACC + "https://shahdev.me" + FNT + " in a browser" + R)
 
 resume = "\n".join(L)
 
 # Clear screen + scrollback + home, so the HTML curl already dumped is wiped,
-# then print the resume on a clean screen. Conceal the closing --> on exit.
+# then print the resume on a clean screen. End with a reset (NOT conceal) so the
+# terminal is left clean; the trailing "-->" reads as a pointer arrow after the
+# last line, and also closes the HTML comment for browsers.
 CLEAR = E + "[2J" + E + "[3J" + E + "[H"
-block = "<!--" + CLEAR + resume + R + "\n" + sgr("8") + "\n-->\n"
+block = "<!--" + CLEAR + resume + "  " + R + "-->\n"
 
 assert "--" not in resume, "resume must not contain -- (would break the HTML comment)"
 
