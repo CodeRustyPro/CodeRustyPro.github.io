@@ -51,6 +51,14 @@
   }
   .receipt b{color:var(--fg);font-weight:600}
   .receipt .ok{color:var(--ok)} .receipt .warn{color:var(--warn)} .receipt .k{color:var(--accent)}
+  details.about{margin-top:.6rem;font-size:.8rem}
+  details.about summary{cursor:pointer;color:var(--accent);list-style:none;display:inline-flex;gap:.4rem;align-items:center;user-select:none;width:fit-content}
+  details.about summary::-webkit-details-marker{display:none}
+  details.about summary::before{content:"ⓘ"}
+  details.about[open] summary::before{content:"×"}
+  details.about p{margin:.55rem 0 0;color:var(--dim);line-height:1.65;max-width:62ch}
+  details.about code{color:var(--accent)}
+  .receipt [title]{text-decoration:underline dotted var(--faint);text-underline-offset:3px;cursor:help}
   .controls{margin-top:.7rem;display:flex;flex-wrap:wrap;gap:.5rem;font-size:.78rem}
   .controls button{
     font:inherit;font-size:.78rem;color:var(--dim);background:transparent;
@@ -69,24 +77,39 @@
   <!-- First ~1KB is plain content: works with JS off, in reader mode, in print, for screen readers. -->
   <header>
     <h1><span class="caret">&gt;</span> dev shah</h1>
-    <p class="pitch">freshman at UIUC · systems, networking &amp; the occasional CTF</p>
+    <p class="pitch">sophomore at UIUC · systems &amp; networking</p>
   </header>
 
   <section>
-    <p>I build low-level and web things. Right now:
-      <a href="https://www.unlimitedsat.com" rel="noopener">unlimitedSAT.com</a>.
-      I also edit video and design — a bit too much, maybe.</p>
+    <p>I like getting close to the metal. Right now I'm building an
+      <b>eBPF/XDP load balancer</b> and a <b>from-scratch HTTP server</b> —
+      learning how packets actually move through a machine. The routing line in
+      the receipt below runs the same consistent-hashing idea, live.</p>
   </section>
 
   <section>
-    <div class="label">selected work</div>
-    <!-- TODO(dev): confirm exact numbers/claims before this goes live. Placeholders flagged with .q -->
+    <div class="label">now — research</div>
     <ul class="wins">
-      <li><a href="https://www.unlimitedsat.com" rel="noopener">unlimitedSAT.com</a> — <span class="q">[one-line what it is / scale]</span></li>
-      <li>Monte Carlo engine in C — <span class="q">[confirm "110× speedup vs ___" + throughput]</span></li>
-      <li>XDP / Maglev load balancer — <span class="q">[confirm what you built + result]</span></li>
-      <li>CTFs with SIGPwny — <span class="q">[confirm notable finishes, e.g. "AMD 1st place"?]</span></li>
+      <li><b>eBPF / XDP load balancer</b> — kernel-level packet steering with Maglev consistent hashing <span class="q">(in progress)</span></li>
+      <li><b>from-scratch HTTP server</b> — in C, learning the stack end to end <span class="q">(in progress)</span></li>
     </ul>
+  </section>
+
+  <section>
+    <div class="label">previously built</div>
+    <ul class="wins">
+      <li>a <a href="https://www.unlimitedsat.com" rel="noopener">SAT-prep platform</a> with AI — reached paying users</li>
+      <li><b>Lofi-Study</b> — productivity site; 97k total users, 10k peak</li>
+      <li><b>InTheLoop</b> — tech &amp; business newsletter, 1,000+ monthly readers</li>
+      <li><b>Petal</b> (LaunchX @ MIT) — AI sustainability platform, $4,000+ in sales</li>
+      <li><b>Bhojan</b> — an AI calorie tracker</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="label">elsewhere</div>
+    <p class="pitch">1st prize, YiCS research paper (NLP sarcasm detection from emoji) ·
+      regional winner, TCS Rural IT Quiz (10k+ entrants) · 300+ online chess wins · I also write.</p>
   </section>
 
   <nav>
@@ -103,6 +126,16 @@
   <section>
     <div class="label">how this page reached you</div>
     <pre class="receipt" id="receipt" aria-live="polite">measuring…<span class="cursor" aria-hidden="true"> </span></pre>
+    <details class="about">
+      <summary>what am I looking at?</summary>
+      <p>No tricks you can't verify. This page arrives in a single network round
+      trip — about 5&nbsp;KB, no web fonts, no frameworks, nothing fetched before it
+      paints — and the box above is built from <em>your</em> browser's real timing
+      of that delivery. The <code>XDP_PASS → maglev</code> line runs a genuine
+      Maglev consistent-hashing table, the same algorithm as the load balancer I'm
+      building: it pins you to a stable backend, and if you kill one, only ~1/N of
+      visitors move. Hover the underlined terms, or try the buttons.</p>
+    </details>
     <div class="controls" id="controls" hidden>
       <button id="kill" type="button">kill a backend</button>
       <button id="reroll" type="button">new visitor id</button>
@@ -197,14 +230,15 @@
         "<b>" + (wire?wire.toLocaleString():"?") + " B</b> on the wire" +
         (t.decoded ? " ("+t.decoded.toLocaleString()+" B decoded)" : "") +
         " — " + (fits
-          ? "<span class='ok'>fits one round trip ✓</span> (≤ 14,600 B initcwnd)"
+          ? "<span class='ok' title='The whole document fit inside the TCP initial congestion window (~14,600 B = 10 segments × 1460 B), so it arrived in a single round trip.'>fits one round trip ✓</span> (≤ 14,600 B initcwnd)"
           : "<span class='warn'>"+(wire?"over initcwnd":"size hidden by browser")+"</span>")
       );
     }
 
     lines.push("");
     lines.push(
-      "<span class='k'>XDP_PASS</span> → maglev[" + a.slot + "] → " +
+      "<span class='k' title='eXpress Data Path: an eBPF hook that steers packets in the kernel, before the normal network stack. XDP_PASS = let this one through.'>XDP_PASS</span> → " +
+      "<span title='Maglev consistent hashing (Google): a lookup table that pins each visitor to a stable backend and barely reshuffles when one is added or removed.'>maglev[" + a.slot + "]</span> → " +
       "<b>" + esc(a.backend) + "</b> of " + live.length +
       "  (view: <span class='k'>" + VIEWS[a.idxOfAll] + "</span>)"
     );
