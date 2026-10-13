@@ -1,0 +1,42 @@
+name: size-budget
+
+# Non-deploying guardrail: keep index.html inside the "one round trip" budget
+# and free of render-blocking external requests. Runs on PRs and pushes; it
+# does NOT deploy, so it won't interfere with GitHub Pages' own publish.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  budget:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: gzip size gate (<= 13,000 B, leaves headroom under 14,600 B initcwnd)
+        run: |
+          LIMIT=13000
+          fail=0
+          for f in index.html 404.html; do
+            [ -f "$f" ] || continue
+            gz=$(gzip -9 -c "$f" | wc -c)
+            raw=$(wc -c < "$f")
+            printf '%-12s raw=%6s B  gzip=%6s B  (limit %s)\n' "$f" "$raw" "$gz" "$LIMIT"
+            if [ "$gz" -gt "$LIMIT" ]; then
+              echo "::error file=$f::$f is $gz B gzipped, over the $LIMIT B budget"
+              fail=1
+            fi
+          done
+          exit $fail
+
+      - name: no render-blocking external resources in index.html
+        run: |
+          # The whole point is zero extra requests before first paint.
+          # Flag any external stylesheet/script/font/image the page would fetch.
+          if grep -nE '<(link|script)[^>]+(href|src)="https?://' index.html; then
+            echo "::error file=index.html::external http(s) resource found — inline it or justify it"
+            exit 1
+          fi
+          echo "ok: no external http(s) <link>/<script> in index.html"
