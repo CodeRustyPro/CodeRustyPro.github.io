@@ -58,7 +58,7 @@
   details.about[open] summary::before{content:"×"}
   details.about p{margin:.55rem 0 0;color:var(--dim);line-height:1.65;max-width:62ch}
   details.about code{color:var(--accent)}
-  .receipt [title]{text-decoration:underline dotted var(--faint);text-underline-offset:3px;cursor:help}
+  .receipt [title]{text-decoration:underline dotted var(--faint);text-underline-offset:3px}
   .controls{margin-top:.7rem;display:flex;flex-wrap:wrap;gap:.5rem;font-size:.78rem}
   .controls button{
     font:inherit;font-size:.78rem;color:var(--dim);background:transparent;
@@ -99,17 +99,15 @@
     <div class="label">previously built</div>
     <ul class="wins">
       <li>a <a href="https://www.unlimitedsat.com" rel="noopener">SAT-prep platform</a> with AI — reached paying users</li>
-      <li><b>Lofi-Study</b> — productivity site; 97k total users, 10k peak</li>
+      <li><b>Lofi-Study</b> — a productivity site built around low-fidelity sound</li>
       <li><b>InTheLoop</b> — tech &amp; business newsletter, 1,000+ monthly readers</li>
-      <li><b>Petal</b> (LaunchX @ MIT) — AI sustainability platform, $4,000+ in sales</li>
       <li><b>Bhojan</b> — an AI calorie tracker</li>
     </ul>
   </section>
 
   <section>
     <div class="label">elsewhere</div>
-    <p class="pitch">1st prize, YiCS research paper (NLP sarcasm detection from emoji) ·
-      regional winner, TCS Rural IT Quiz (10k+ entrants) · 300+ online chess wins · I also write.</p>
+    <p class="pitch">1st prize — AMD AI · 2nd place — Fall CTF 2026 · chess ~1800 Elo</p>
   </section>
 
   <nav>
@@ -128,7 +126,7 @@
     <pre class="receipt" id="receipt" aria-live="polite">measuring…<span class="cursor" aria-hidden="true"> </span></pre>
     <details class="about">
       <summary>what am I looking at?</summary>
-      <p>No tricks you can't verify. This page arrives in a single network round
+      <p>This page arrives in a single network round
       trip — about 5&nbsp;KB, no web fonts, no frameworks, nothing fetched before it
       paints — and the box above is built from <em>your</em> browser's real timing
       of that delivery. The <code>XDP_PASS → maglev</code> line runs a genuine
