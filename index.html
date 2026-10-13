@@ -9,101 +9,83 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2213%22 font-size=%2214%22>↹</text></svg>">
 <style>
   :root{
-    --bg:#0a0e13; --panel:#10151d; --fg:#dde3ea; --dim:#8a93a3; --faint:#454d59;
-    --line:#1b222c; --accent:#5fd0b4; --warn:#e8b14c;
-    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
-    --measure:38rem;
-    --s1:.5rem; --s2:1rem; --s3:1.5rem; --s4:2.5rem; --s5:3.75rem;
+    --bg:#0b0c0e; --fg:#d7dae0; --dim:#7c8290; --faint:#3a3f48;
+    --accent:#58d6b8; --line:#1a1d22; --ok:#58d6b8; --warn:#e8b14c;
   }
   @media (prefers-color-scheme: light){
     :root:not([data-theme="dark"]){
-      --bg:#f7f8f5; --panel:#ffffff; --fg:#1b2027; --dim:#5b6472; --faint:#aeb6c0;
-      --line:#e5e8ea; --accent:#0a8f74; --warn:#9a6a05;
+      --bg:#f7f8fa; --fg:#1b1e24; --dim:#5b616c; --faint:#c7ccd4;
+      --accent:#0a8f74; --line:#e4e7ec; --ok:#0a8f74; --warn:#9a6a05;
     }
   }
   :root[data-theme="light"]{
-    --bg:#f7f8f5; --panel:#ffffff; --fg:#1b2027; --dim:#5b6472; --faint:#aeb6c0;
-    --line:#e5e8ea; --accent:#0a8f74; --warn:#9a6a05;
-  }
-  :root[data-theme="dark"]{
-    --bg:#0a0e13; --panel:#10151d; --fg:#dde3ea; --dim:#8a93a3; --faint:#454d59;
-    --line:#1b222c; --accent:#5fd0b4; --warn:#e8b14c;
+    --bg:#f7f8fa; --fg:#1b1e24; --dim:#5b616c; --faint:#c7ccd4;
+    --accent:#0a8f74; --line:#e4e7ec; --ok:#0a8f74; --warn:#9a6a05;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%}
   body{
-    background:var(--bg); color:var(--fg); font-family:var(--sans);
-    font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility;
-    padding:var(--s5) 20px; display:flex; justify-content:center;
+    background:var(--bg); color:var(--fg);
+    font:15px/1.55 ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    padding:clamp(1rem,3vw,2rem) 16px; display:flex; justify-content:center;
+    -webkit-font-smoothing:antialiased;
   }
-  main{width:100%;max-width:44rem}
-  a{color:var(--fg);text-decoration:none;border-bottom:1px solid var(--faint);transition:color .15s,border-color .15s}
-  a:hover{color:var(--accent);border-color:var(--accent)}
-  b{font-weight:600}
+  main{width:100%;max-width:70ch}
+  a{color:var(--fg);text-underline-offset:3px;text-decoration-color:var(--faint)}
+  a:hover{text-decoration-color:var(--accent);color:var(--accent)}
 
-  /* hero */
-  .hero{margin-bottom:var(--s5)}
-  .idrow{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:var(--s1) var(--s3)}
-  h1{font-size:clamp(1.7rem,5vw,2.2rem);font-weight:680;letter-spacing:-.025em;line-height:1.05}
-  h1 .caret{font-family:var(--mono);font-weight:500;color:var(--accent)}
+  /* header: name on the left, links across from it */
+  .idrow{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.35rem 1.2rem}
+  h1{font-size:1.15rem;font-weight:600;letter-spacing:-.01em}
+  h1 .caret{color:var(--accent)}
   .name-text{cursor:default}
-  .toplinks{display:flex;flex-wrap:wrap;gap:var(--s2);font-family:var(--mono);font-size:.8rem}
-  .toplinks a{color:var(--dim);border-bottom-color:transparent}
+  .toplinks{display:flex;flex-wrap:wrap;gap:.1rem 1.1rem;font-size:.82rem}
+  .toplinks a{color:var(--dim)}
   .toplinks a:hover{color:var(--accent)}
-  .pitch{margin-top:var(--s3);color:var(--dim);max-width:34rem}
-  .pitch b{color:var(--fg)}
+  .pitch{color:var(--dim);margin:.5rem 0 0;line-height:1.5}
+  .pitch b{color:var(--fg);font-weight:600}
 
-  /* sections */
-  section{margin-bottom:var(--s4)}
-  h2{font-size:1.06rem;font-weight:650;letter-spacing:-.01em;margin-bottom:var(--s2)}
+  section{margin:1.15rem 0}
+  .label{color:var(--dim);font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;margin-bottom:.45rem}
+  ul{list-style:none}
+  .wins li{padding:.1rem 0}
+  .wins li::before{content:"— ";color:var(--faint)}
+  .wins b{font-weight:600}
+  .wins .q{color:var(--dim)}
 
-  /* spec rows */
-  .rows{display:flex;flex-direction:column;gap:.6rem}
-  .row{display:grid;grid-template-columns:minmax(0,13.5rem) 1fr;gap:.15rem var(--s3);align-items:baseline}
-  .rk{font-weight:550}
-  .rv{color:var(--dim)}
-  .rv .wip{font-style:normal;color:var(--faint)}
-  .row.win .rk{color:var(--accent);font-weight:600}
-  @media (max-width:540px){ .row{grid-template-columns:1fr;gap:.05rem} }
-
-  /* receipt — the live instrument (hero) */
-  .trace{margin-bottom:var(--s5)}
-  .rbar{display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.72rem;color:var(--dim);margin-bottom:.55rem}
-  .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2.4s ease-out infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(95,208,180,.45)}70%{box-shadow:0 0 0 7px rgba(95,208,180,0)}100%{box-shadow:0 0 0 0 rgba(95,208,180,0)}}
+  /* the receipt */
   .receipt{
-    font-family:var(--mono);font-size:.8rem;line-height:1.75;color:var(--dim);
-    background:var(--panel);border:1px solid var(--line);border-radius:10px;
-    padding:1rem 1.15rem;white-space:pre-wrap;word-break:break-word;min-height:5.2em;
+    border:1px solid var(--line); border-radius:7px; padding:.85rem 1rem;
+    color:var(--dim); font-size:.82rem; white-space:pre-wrap; word-break:break-word;
+    background:color-mix(in srgb,var(--fg) 3%,transparent); min-height:4.6em;
   }
   .receipt b{color:var(--fg);font-weight:600}
-  .receipt .ok{color:var(--accent)} .receipt .warn{color:var(--warn)} .receipt .k{color:var(--accent)}
+  .receipt .ok{color:var(--ok)} .receipt .warn{color:var(--warn)} .receipt .k{color:var(--accent)}
   .receipt [title]{text-decoration:underline dotted var(--faint);text-underline-offset:3px}
-  details.about{margin-top:.65rem;font-family:var(--mono);font-size:.76rem}
-  details.about summary{cursor:pointer;color:var(--accent);list-style:none;display:inline-flex;gap:.4rem;align-items:center;width:fit-content}
+  details.about{margin-top:.55rem;font-size:.8rem}
+  details.about summary{cursor:pointer;color:var(--accent);list-style:none;display:inline-flex;gap:.4rem;align-items:center;user-select:none;width:fit-content}
   details.about summary::-webkit-details-marker{display:none}
   details.about summary::before{content:"ⓘ"}
   details.about[open] summary::before{content:"×"}
-  details.about p{margin-top:.6rem;font-family:var(--sans);font-size:.88rem;color:var(--dim);line-height:1.6;max-width:var(--measure)}
-  details.about code{font-family:var(--mono);color:var(--accent)}
-  .controls{margin-top:.75rem;display:flex;flex-wrap:wrap;gap:.5rem}
-  .controls button{font-family:var(--mono);font-size:.74rem;color:var(--dim);background:transparent;border:1px solid var(--line);border-radius:7px;padding:.4rem .8rem;cursor:pointer;transition:.15s}
+  details.about p{margin:.55rem 0 0;color:var(--dim);line-height:1.6;max-width:62ch}
+  details.about code{color:var(--accent)}
+  .controls{margin-top:.6rem;display:flex;flex-wrap:wrap;gap:.5rem;font-size:.78rem}
+  .controls button{font:inherit;font-size:.78rem;color:var(--dim);background:transparent;border:1px solid var(--line);border-radius:5px;padding:.3rem .7rem;cursor:pointer}
   .controls button:hover{color:var(--accent);border-color:var(--accent)}
-
-  footer{color:var(--faint);font-family:var(--mono);font-size:.74rem;line-height:1.7}
-  footer a{color:var(--dim);border-bottom:none}
-  footer a:hover{color:var(--accent)}
+  footer{margin-top:1.4rem;color:var(--faint);font-size:.75rem}
+  footer a{color:var(--faint)}
   footer code{color:var(--dim)}
 
-  /* motion: one orchestrated moment — the trace arriving line by line */
+  /* cursor + reveal + per-line trace animation (all cosmetic, opt-out below) */
   .cursor{display:inline-block;width:.5ch;background:var(--accent);animation:blink 1.1s step-end infinite}
   @keyframes blink{50%{opacity:0}}
-  @keyframes fadein{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
-  .rline{opacity:0;animation:fadein .34s ease forwards}
+  @keyframes rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+  .reveal{animation:rise .55s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes fadein{to{opacity:1}}
+  .rline{opacity:0;animation:fadein .32s ease forwards}
   @media (prefers-reduced-motion:reduce){
-    .cursor,.dot{animation:none}
+    .cursor{animation:none}
+    .reveal{animation:none}
     .rline{opacity:1;animation:none}
   }
 </style>
@@ -111,7 +93,7 @@
 <body>
 <main>
   <!-- First paint is plain content: works JS-off, reader mode, print, screen readers. -->
-  <header class="hero">
+  <header class="reveal" style="animation-delay:.02s">
     <div class="idrow">
       <h1><span class="caret">&gt;</span> <span class="name-text">dev shah</span></h1>
       <nav class="toplinks">
@@ -122,23 +104,46 @@
         <a href="blogs.html">blog</a>
       </nav>
     </div>
-    <p class="pitch">I'm a sophomore at UIUC. Right now I'm building an <b>eBPF/XDP load
-      balancer</b> and a <b>from-scratch HTTP server</b> — getting close to how packets
-      actually move. This page is part of that: it reports how it reached you.</p>
+    <p class="pitch">sophomore at UIUC · systems &amp; networking. right now I'm building an
+      <b>eBPF/XDP load balancer</b> and a <b>from-scratch HTTP server</b> — the routing line
+      in the receipt below runs the same consistent-hashing idea, live.</p>
   </header>
 
-  <section class="trace">
-    <h2>how it reached you</h2>
-    <div class="rbar"><span class="dot" aria-hidden="true"></span> live, measured from your own connection</div>
+  <section class="reveal" style="animation-delay:.09s">
+    <div class="label">now — research</div>
+    <ul class="wins">
+      <li><b>eBPF / XDP load balancer</b> — kernel-level packet steering with Maglev consistent hashing <span class="q">(in progress)</span></li>
+      <li><b>from-scratch HTTP server</b> — in C, learning the stack end to end <span class="q">(in progress)</span></li>
+    </ul>
+  </section>
+
+  <section class="reveal" style="animation-delay:.15s">
+    <div class="label">previously built</div>
+    <ul class="wins">
+      <li><b>Unlimited SAT</b> - an SAT-prep platform with paying users</li>
+      <li><b>OpenFix</b> — <span class="q">Agentic Github issue resolver</span></li>
+      <li><b>Lofi-Study</b> — a productivity site built around low-fidelity sound</li>
+      <li><b>Bhojan</b> — an AI calorie tracker</li>
+    </ul>
+  </section>
+
+  <section class="reveal" style="animation-delay:.21s">
+    <div class="label">elsewhere</div>
+    <p class="pitch">1st prize — AMD AI Design Competition · 2nd place — Fall CTF 2026 · chess ~1800 Elo</p>
+  </section>
+
+  <section class="reveal" style="animation-delay:.27s">
+    <div class="label">how this page reached you</div>
     <pre class="receipt" id="receipt" aria-live="polite">measuring…<span class="cursor" aria-hidden="true"> </span></pre>
     <details class="about">
       <summary>what am I looking at?</summary>
-      <p>This page arrives in a single network round trip — a few kilobytes, no web
+      <p>This page arrives in a single network round trip — about 6&nbsp;KB, no web
       fonts, no frameworks, nothing fetched before it paints — and the box above is
       built from <em>your</em> browser's real timing of that delivery. The
       <code>XDP_PASS → maglev</code> line runs a genuine Maglev consistent-hashing
       table, the same algorithm as the load balancer I'm building: it pins you to a
-      stable backend, and if you kill one, only ~1/N of visitors move.</p>
+      stable backend, and if you kill one, only ~1/N of visitors move. Hover the
+      underlined terms, or try the buttons.</p>
     </details>
     <div class="controls" id="controls" hidden>
       <button id="kill" type="button">kill a backend</button>
@@ -147,36 +152,8 @@
     </div>
   </section>
 
-  <section>
-    <h2>building now</h2>
-    <div class="rows">
-      <div class="row"><span class="rk">eBPF/XDP load balancer</span><span class="rv">kernel packet steering with Maglev hashing <em class="wip">in progress</em></span></div>
-      <div class="row"><span class="rk">HTTP server, from scratch</span><span class="rv">in C, the whole stack <em class="wip">in progress</em></span></div>
-    </div>
-  </section>
-
-  <section>
-    <h2>previously built</h2>
-    <div class="rows">
-      <div class="row"><span class="rk">Unlimited SAT</span><span class="rv">SAT-prep platform with paying users</span></div>
-      <div class="row"><span class="rk">OpenFix</span><span class="rv">agentic GitHub issue resolver</span></div>
-      <div class="row"><span class="rk">Lofi-Study</span><span class="rv">productivity site built around low-fidelity sound</span></div>
-      <div class="row"><span class="rk">Bhojan</span><span class="rv">an AI calorie tracker</span></div>
-    </div>
-  </section>
-
-  <section>
-    <h2>elsewhere</h2>
-    <div class="rows">
-      <div class="row win"><span class="rk">1st place</span><span class="rv">AMD AI Design Competition</span></div>
-      <div class="row win"><span class="rk">2nd place</span><span class="rv">Fall CTF 2026</span></div>
-      <div class="row win"><span class="rk">~1800 Elo</span><span class="rv">chess, online</span></div>
-    </div>
-  </section>
-
-  <footer>
-    the whole page got here in one round trip. prefer it bare? <a href="?plain">plain mode</a>.
-    or run <code>curl -L shahdev.me</code>.
+  <footer class="reveal" style="animation-delay:.33s">
+    one round trip · <a href="?plain">plain mode</a> · psst — <code>curl -L shahdev.me</code>
   </footer>
 </main>
 
@@ -248,7 +225,7 @@
     lines.push("<span class='k' title='eXpress Data Path: an eBPF hook that steers packets in the kernel, before the normal network stack. XDP_PASS = let this one through.'>XDP_PASS</span> → "+
       "<span title='Maglev consistent hashing (Google): a lookup table that pins each visitor to a stable backend and barely reshuffles when one is added or removed.'>maglev["+a.slot+"]</span> → "+
       "<b>"+esc(a.backend)+"</b> of "+live.length+"  (view: <span class='k'>"+VIEWS[a.idxOfAll]+"</span>)");
-    lines.push("<span style='color:var(--faint)'>visitor "+esc(id.slice(0,12))+" · hashed to a stable backend</span>");
+    lines.push("<span style='color:var(--faint)'>visitor "+esc(id.slice(0,12))+" · every visitor is hashed to a stable backend</span>");
     return lines;
   }
 
